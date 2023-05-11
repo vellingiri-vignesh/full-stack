@@ -1,27 +1,34 @@
 package com.divineaura;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Scope;
 
 @SpringBootApplication
-@RestController
 public class Main {
     public static void main(String[] args) {
-        SpringApplication.run(Main.class, args);
+        ConfigurableApplicationContext applicationContext = SpringApplication.run(Main.class, args);
+//        printBeans(applicationContext);
+        Foo foo = applicationContext.getBean(Foo.class);
+        System.out.println(foo.bar());
     }
 
-    @GetMapping("/")
-    public Greeting greet() {
-        return new Greeting("Hello...",
-            List.of("Java","GoLang","JavaScript"),
-            new Person("Anand", 18));
+    @Bean
+    @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
+    public Foo getFoo() {
+        System.out.println("Bar Bean loading...");
+        return new Foo("Bar");
+    }
+    record Foo(String bar) { }
+    private static void printBeans(ConfigurableApplicationContext applicationContext) {
+        String[] beanDefinitionNames = applicationContext.getBeanDefinitionNames();
+        for (String beanDefinitionName : beanDefinitionNames) {
+            System.out.println(beanDefinitionName);
+        }
     }
 
-    record Person(String name, int age) { };
 
-    record Greeting(String message, List<String> favProgrammingLanguages, Person person) { }
 }
