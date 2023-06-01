@@ -11,6 +11,12 @@ spring:
     url: jdbc:postgresql://localhost:5332/customer
     username: divineaura
     password: password
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      auto-commit: true
+      connection-timeout: 300
+      idle-timeout: 60
   jpa:
     hibernate:
       ddl-auto: validate

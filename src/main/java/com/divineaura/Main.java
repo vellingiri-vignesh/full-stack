@@ -26,14 +26,10 @@ public class Main {
     CommandLineRunner runner(CustomerRepository customerRepository) {
         Random random = new Random();
         Faker fakerCustOne = new Faker();
-        Faker fakerCustTwo = new Faker();
         Customer custOne = new Customer( fakerCustOne.name().fullName(),
             fakerCustOne.internet().safeEmailAddress(),
             random.nextInt(14, 80));
-        Customer custTwo = new Customer( fakerCustTwo.name().fullName(),
-            fakerCustOne.internet().safeEmailAddress(),
-            random.nextInt(20, 80));
-        List<Customer> customers = List.of(custOne, custTwo);
+        List<Customer> customers = List.of(custOne);
         return args -> {
             customerRepository.saveAll(customers);
         };
