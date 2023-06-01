@@ -1,6 +1,10 @@
 package com.divineaura;
 
+import com.divineaura.customer.Customer;
+import com.divineaura.customer.CustomerRepository;
+import java.util.List;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -14,6 +18,16 @@ public class Main {
 //        printBeans(applicationContext);
         Foo foo = applicationContext.getBean(Foo.class);
         System.out.println(foo.bar());
+    }
+
+    @Bean
+    CommandLineRunner runner(CustomerRepository customerRepository) {
+        Customer anand = new Customer( "Anand" , "anand@hotmail.com", 18);
+        Customer saki = new Customer( "Saki" , "saki@hotmail.com", 16);
+        List<Customer> customers = List.of(anand, saki);
+        return args -> {
+            customerRepository.saveAll(customers);
+        };
     }
 
     @Bean

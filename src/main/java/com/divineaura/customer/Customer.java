@@ -1,13 +1,44 @@
 package com.divineaura.customer;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import java.util.Objects;
 
+@Entity
 public class Customer {
+
+    @Id
+    @SequenceGenerator(
+        name = "customer_id_sequence",
+        sequenceName = "customer_id_sequence"
+    )
+    @GeneratedValue(
+        strategy = GenerationType.SEQUENCE,
+        generator = "customer_id_sequence"
+    )
     private Integer id;
+    @Column(
+        nullable = false
+    )
     private String name;
+    @Column(
+        nullable = false
+    )
     private String email;
+    @Column(
+        nullable = false
+    )
     private Integer age;
 
+    public Customer(String name, String email, Integer age) {
+        this.name = name;
+        this.email = email;
+        this.age = age;
+    }
 
     public Customer(Integer id, String name, String email, Integer age) {
         this.id = id;
@@ -16,6 +47,9 @@ public class Customer {
         this.age = age;
     }
 
+    public Customer() {
+
+    }
     public Integer getId() {
         return id;
     }
@@ -76,3 +110,4 @@ public class Customer {
             '}';
     }
 }
+
