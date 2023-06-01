@@ -2,7 +2,9 @@ package com.divineaura;
 
 import com.divineaura.customer.Customer;
 import com.divineaura.customer.CustomerRepository;
+import com.github.javafaker.Faker;
 import java.util.List;
+import java.util.Random;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -22,14 +24,25 @@ public class Main {
 
     @Bean
     CommandLineRunner runner(CustomerRepository customerRepository) {
-        Customer anand = new Customer( "Anand" , "anand@hotmail.com", 18);
-        Customer saki = new Customer( "Saki" , "saki@hotmail.com", 16);
-        List<Customer> customers = List.of(anand, saki);
+        Random random = new Random();
+        Faker fakerCustOne = new Faker();
+        Faker fakerCustTwo = new Faker();
+        Customer custOne = new Customer( fakerCustOne.name().fullName(),
+            fakerCustOne.internet().safeEmailAddress(),
+            random.nextInt(14, 80));
+        Customer custTwo = new Customer( fakerCustTwo.name().fullName(),
+            fakerCustOne.internet().safeEmailAddress(),
+            random.nextInt(20, 80));
+        List<Customer> customers = List.of(custOne, custTwo);
         return args -> {
             customerRepository.saveAll(customers);
         };
     }
 
+    /**
+     *
+     * Below piece of snippet is for learning bean
+     */
     @Bean
     @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
     public Foo getFoo() {
