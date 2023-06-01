@@ -1,6 +1,5 @@
 package com.divineaura.customer;
 
-import com.divineaura.exception.ResourceNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Repository;
@@ -42,6 +41,11 @@ public class CustomerJPADataAccessService implements CustomerDao{
     @Override
     public void deleteCustomerById(Integer customerId) {
         customerRepository.deleteById(customerId);
+    }
+
+    @Override
+    public void updateCustomer(Customer customer) {
+        customerRepository.save(customer);
     }
 
 
