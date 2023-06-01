@@ -9,11 +9,12 @@ import org.springframework.stereotype.Repository;
 public class CustomerListDataAccessService implements CustomerDao{
 
     private static final List<Customer> customers = new ArrayList<>();
+    private int nextId = 0;
 
      {
-        Customer anand = new Customer(1, "Anand" , "anand@hotmail.com", 18);
+        Customer anand = new Customer(++nextId, "Anand" , "anand@hotmail.com", 18);
         customers.add(anand);
-        Customer saki = new Customer(2, "Saki" , "saki@hotmail.com", 16);
+        Customer saki = new Customer(++nextId, "Saki" , "saki@hotmail.com", 16);
         customers.add(saki);
     }
 
@@ -31,6 +32,9 @@ public class CustomerListDataAccessService implements CustomerDao{
 
     @Override
     public void insertCustomer(Customer customer) {
+        if (customer.getId() == null) {
+            customer.setId(++nextId);
+        }
         customers.add(customer);
     }
 
@@ -48,7 +52,9 @@ public class CustomerListDataAccessService implements CustomerDao{
 
     @Override
     public void deleteCustomerById(Integer customerId) {
-        Optional<Customer> customer = selectCustomerById(customerId);
-        customers.remove(customer);
+        customers.stream()
+            .filter(c -> c.getId().equals(customerId))
+            .findFirst()
+            .ifPresent(c -> customers.remove(c));
     }
 }
