@@ -2,8 +2,8 @@ package com.divineaura.customer;
 
 import java.util.List;
 import java.util.Optional;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 @Repository("jdbc")
@@ -54,7 +54,7 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
             WHERE email = ?
             """;
         Integer count = jdbcTemplate.queryForObject(sql, new Object[] {email}, Integer.class);
-        return count != null && count >0;
+        return count != null && count > 0;
     }
 
     @Override
@@ -64,7 +64,7 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
             WHERE id = ?
             """;
         Integer count = jdbcTemplate.queryForObject(sql, new Object[] {id}, Integer.class);
-        return count != null && count >0;
+        return count != null && count > 0;
     }
 
     @Override
@@ -78,12 +78,36 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
 
     @Override
     public void updateCustomer(Customer customer) {
-        var sql = """
-            UPDATE customer SET
-            name = ?, email = ? , age = ?
-            WHERE ID = ?
-            """;
-        int update = jdbcTemplate.update(sql, customer.getName(), customer.getEmail(), customer.getAge(), customer.getId());
-        System.out.println("jdbc.update result : " + update);
+        if (!StringUtils.isBlank(customer.getName())) {
+            var sql = """
+                UPDATE customer SET
+                name = ?
+                WHERE ID = ?
+                """;
+            int update =
+                jdbcTemplate.update(sql, customer.getName(), customer.getId());
+            System.out.println("jdbc.update name result : " + update);
+        }
+        if (!StringUtils.isBlank(customer.getEmail())) {
+            var sql = """
+                UPDATE customer SET
+                email = ? 
+                WHERE ID = ?
+                """;
+            int update =
+                jdbcTemplate.update(sql, customer.getEmail(), customer.getId());
+            System.out.println("jdbc.update email result : " + update);
+        }
+        if (customer.getAge() != null && customer.getAge() !=0) {
+            var sql = """
+                UPDATE customer SET
+                age = ?
+                WHERE ID = ?
+                """;
+            int update =
+                jdbcTemplate.update(sql, customer.getAge(), customer.getId());
+            System.out.println("jdbc.update age result : " + update);
+        }
+
     }
 }
