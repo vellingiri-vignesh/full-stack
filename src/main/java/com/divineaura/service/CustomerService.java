@@ -58,6 +58,9 @@ public class CustomerService {
             }
 
             if (customerUpdateRequest.email() != null && !customerUpdateRequest.email().equals(customer.getEmail())) {
+                if (customerDao.existsCustomerWithEmail(customerUpdateRequest.email())) {
+                    throw new DuplicateResourceException("Customer with email already exists...");
+                }
                 customer.setEmail(customerUpdateRequest.email());
                 hasChange = true;
             }
