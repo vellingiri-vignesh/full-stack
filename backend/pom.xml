@@ -125,7 +125,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <configuration>
-                    <classesDirectory>${project.build.outputDirectory}</classesDirectory>
+                    <classesDirectory>../target/classes</classesDirectory>
                     <systemPropertyVariables>
                         <test.server.port>${tomcat.http.port}</test.server.port>
                     </systemPropertyVariables>
