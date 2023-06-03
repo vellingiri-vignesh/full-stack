@@ -29,6 +29,18 @@ services:
     restart: unless-stopped
     depends_on:
       - db
+  divineaura-api:
+    container_name: divineaura-api
+    image: vickymaya/divineaura-api
+    environment:
+      SPRING_DATASOURCE_URL : "jdbc:postgresql://db:5432/customer"
+    ports:
+      - "8084:8082"
+    networks:
+      - postgres
+    depends_on:
+      - db
+    restart: unless-stopped
 
 networks:
   postgres:
