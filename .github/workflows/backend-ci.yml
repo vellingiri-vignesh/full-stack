@@ -14,7 +14,7 @@ jobs:
       postgres:
         image: postgres:14.5
         env:
-          POSTGRES_USER: amigoscode
+          POSTGRES_USER: divineaura
           POSTGRES_PASSWORD: password
           POSTGRES_DB: customer
         ports:
