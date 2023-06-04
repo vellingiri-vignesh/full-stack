@@ -17,7 +17,6 @@ import org.springframework.context.annotation.Scope;
 public class Main {
     public static void main(String[] args) {
         ConfigurableApplicationContext applicationContext = SpringApplication.run(Main.class, args);
-//        printBeans(applicationContext);
         Foo foo = applicationContext.getBean(Foo.class);
         System.out.println(foo.bar());
     }

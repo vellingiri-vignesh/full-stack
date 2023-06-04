@@ -14,7 +14,7 @@ jobs:
       postgres:
         image: postgres:14.5
         env:
-          POSTGRES_USER: amigoscode
+          POSTGRES_USER: divineaura
           POSTGRES_PASSWORD: password
           POSTGRES_DB: customer
         ports:
@@ -36,4 +36,4 @@ jobs:
           java-version: '17'
           cache: 'maven'
       - name: Build and run Unit/Integration Tests with Maven
-        run: mvn -ntp -B verify
+        run: mvn -ntp -B verify -Djib.to.auth.password=${{ secrets.VIGNESH_DOCKER_PASSWORD }} -Djib.to.auth.username=vickymaya
