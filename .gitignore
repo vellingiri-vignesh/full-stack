@@ -31,3 +31,5 @@ dist-ssr
 *.sln
 *.sw?
 .java-version
+
+backend/flyway.conf
