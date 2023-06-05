@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.divineaura.customer.Customer;
 import com.divineaura.customer.CustomerRegistrationRequest;
 import com.divineaura.customer.CustomerUpdateRequest;
+import com.divineaura.customer.Gender;
 import com.github.javafaker.Faker;
 import java.util.List;
 import java.util.UUID;
@@ -29,6 +30,7 @@ class CustomerIntegrationTest {
         Faker faker = new Faker();
         int age = 20;
         String name = faker.name().fullName();
+        Gender gender = Gender.MALE;
         String email = faker.internet().safeEmailAddress() + "-"
             + UUID.randomUUID()
             + "foobar123@gmail.com";
@@ -36,7 +38,8 @@ class CustomerIntegrationTest {
             new CustomerRegistrationRequest(
                 name,
                 email,
-                age
+                age,
+                gender
             );
 
         // Send a POST request to API
@@ -62,7 +65,7 @@ class CustomerIntegrationTest {
             .getResponseBody();
 
         // Make sure that Customer is present
-        Customer expected = new Customer(name, email, age);
+        Customer expected = new Customer(name, email, age, gender);
         assertThat(allCustomers)
             .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id")
             .contains(expected);
@@ -92,6 +95,7 @@ class CustomerIntegrationTest {
         // Create a registration Request
         Faker faker = new Faker();
         int age = 20;
+        Gender gender = Gender.MALE;
         String name = faker.name().fullName();
         String email = faker.internet().safeEmailAddress() + "-"
             + UUID.randomUUID()
@@ -100,7 +104,8 @@ class CustomerIntegrationTest {
             new CustomerRegistrationRequest(
                 name,
                 email,
-                age
+                age,
+                gender
             );
 
         // Send a POST request to API
@@ -157,6 +162,7 @@ class CustomerIntegrationTest {
         Faker faker = new Faker();
         int age = 20;
         String name = faker.name().fullName();
+        Gender gender = Gender.MALE;
         String email = faker.internet().safeEmailAddress() + "-"
             + UUID.randomUUID()
             + "foobar123@gmail.com";
@@ -165,7 +171,8 @@ class CustomerIntegrationTest {
             new CustomerRegistrationRequest(
                 name,
                 email,
-                age
+                age,
+                gender
             );
 
         // Send a POST request to API
@@ -199,7 +206,7 @@ class CustomerIntegrationTest {
             .orElseThrow();
 
         var updatedEmail = UUID.randomUUID() + "@fooUpdated.com";
-        CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest(null, updatedEmail, null);
+        CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest(null, updatedEmail, null, null);
 
         webTestClient.put()
             .uri(CUSTOMER_URI + "/{id}", id)
@@ -211,7 +218,7 @@ class CustomerIntegrationTest {
             .isOk();
 
         // Get Customer By ID
-        var expected = new Customer(id, name, updatedEmail, age);
+        var expected = new Customer(id, name, updatedEmail, age, gender);
 
         Customer actual = webTestClient.get()
             .uri(CUSTOMER_URI + "/{id}", id)

@@ -17,7 +17,7 @@
         <java.version>17</java.version>
         <docker.username>vickymaya</docker.username>
         <docker.image.name>divineaura-api</docker.image.name>
-        <docker.image.tag/>
+        <docker.image.tag>latest</docker.image.tag>
     </properties>
     <organization>
         <name>divineaura</name>

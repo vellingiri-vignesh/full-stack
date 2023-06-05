@@ -12,9 +12,9 @@ public class CustomerListDataAccessService implements CustomerDao{
     private int nextId = 0;
 
      {
-        Customer anand = new Customer(++nextId, "Anand" , "anand@hotmail.com", 18);
+        Customer anand = new Customer(++nextId, "Anand" , "anand@hotmail.com", 18, Gender.MALE);
         customers.add(anand);
-        Customer saki = new Customer(++nextId, "Saki" , "saki@hotmail.com", 16);
+        Customer saki = new Customer(++nextId, "Saki" , "saki@hotmail.com", 16, Gender.FEMALE);
         customers.add(saki);
     }
 

@@ -36,7 +36,8 @@ class CustomerRepositoryTest extends AbstractTestContainer {
         Customer customer = new Customer(
             FAKER.name().fullName(),
             email,
-            22
+            22,
+            Gender.FEMALE
         );
         underTest.save(customer);
         Integer customerId = underTest.findAll().stream()
@@ -71,7 +72,8 @@ class CustomerRepositoryTest extends AbstractTestContainer {
         Customer customer = new Customer(
             FAKER.name().fullName(),
             email,
-            22
+            22,
+            Gender.FEMALE
         );
         underTest.save(customer);
         Integer customerId = underTest.findAll().stream()

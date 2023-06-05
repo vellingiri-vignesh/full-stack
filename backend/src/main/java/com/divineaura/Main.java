@@ -2,6 +2,7 @@ package com.divineaura;
 
 import com.divineaura.customer.Customer;
 import com.divineaura.customer.CustomerRepository;
+import com.divineaura.customer.Gender;
 import com.github.javafaker.Faker;
 import java.util.List;
 import java.util.Random;
@@ -25,9 +26,12 @@ public class Main {
     CommandLineRunner runner(CustomerRepository customerRepository) {
         Random random = new Random();
         Faker fakerCustOne = new Faker();
+        int age = random.nextInt(14, 80);
+        Gender gender = (age%2 ==0) ? Gender.FEMALE : Gender.FEMALE;
         Customer custOne = new Customer( fakerCustOne.name().fullName(),
             fakerCustOne.internet().safeEmailAddress(),
-            random.nextInt(14, 80));
+            age,
+            gender);
         List<Customer> customers = List.of(custOne);
         return args -> {
             customerRepository.saveAll(customers);

@@ -33,7 +33,7 @@ public class CustomerService {
             throw new DuplicateResourceException("Customer with email already exists...");
         }
         customerDao.insertCustomer(new Customer(customerRegistrationRequest.name(), customerRegistrationRequest.email(),
-            customerRegistrationRequest.age()));
+            customerRegistrationRequest.age(), customerRegistrationRequest.gender()));
 
     }
 
@@ -67,6 +67,11 @@ public class CustomerService {
 
             if (customerUpdateRequest.age() != null && !customerUpdateRequest.age().equals(customer.getAge())) {
                 customer.setAge(customerUpdateRequest.age());
+                hasChange = true;
+            }
+
+            if (customerUpdateRequest.gender() != null && !customerUpdateRequest.gender().equals(customer.getGender())) {
+                customer.setGender(customerUpdateRequest.gender());
                 hasChange = true;
             }
 

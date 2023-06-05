@@ -12,10 +12,11 @@ import {
 import {getProfilePictureUrl} from "../services/client";
 
 export default function CardWithImage(props) {
+    var gender = props.gender === 'MALE' ? 'men' : 'women'
     return (
         <Center py={6}>
             <Box
-                maxW={'350px'}
+                maxW={'300px'}
                 w={'full'}
                 bg={useColorModeValue('white', 'gray.800')}
                 boxShadow={'2xl'}
@@ -33,7 +34,7 @@ export default function CardWithImage(props) {
                     <Avatar
                         size={'xl'}
                         src={
-                            getProfilePictureUrl(props.gender, props.id)
+                            getProfilePictureUrl(props.gender, props.imageNumber)
                         }
                         alt={'Author'}
                         css={{
@@ -42,17 +43,17 @@ export default function CardWithImage(props) {
                     />
                 </Flex>
 
-                <Box p={6}>
+                <Box p={6}
+                     maxW={'300px'}>
                     <Stack spacing={0} align={'center'} mb={5}>
                         <Tag borderRadius={"full"}>
                             {props.id}
                         </Tag>
                         <Heading fontSize={'2xl'} fontWeight={500} fontFamily={'body'}>
-
                             {props.name}
                         </Heading>
                         <Text color={'gray.500'}>{props.email}</Text>
-                        <Text color={'gray.500'}>{props.age} | {props.gender} </Text>
+                        <Text color={'gray.500'}>{props.age} | {gender} </Text>
                     </Stack>
 
 

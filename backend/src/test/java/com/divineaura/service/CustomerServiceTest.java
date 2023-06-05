@@ -12,6 +12,7 @@ import com.divineaura.customer.Customer;
 import com.divineaura.customer.CustomerDao;
 import com.divineaura.customer.CustomerRegistrationRequest;
 import com.divineaura.customer.CustomerUpdateRequest;
+import com.divineaura.customer.Gender;
 import com.divineaura.exception.DuplicateResourceException;
 import com.divineaura.exception.RequestValidationException;
 import com.divineaura.exception.ResourceNotFoundException;
@@ -51,7 +52,7 @@ class CustomerServiceTest {
     void getCustomerById() {
         //Given
         int id = 2;
-        Customer customer = new Customer(id, FAKER.name().fullName(), FAKER.internet().safeEmailAddress(), 12);
+        Customer customer = new Customer(id, FAKER.name().fullName(), FAKER.internet().safeEmailAddress(), 12, Gender.FEMALE);
         when(customerDao.selectCustomerById(id))
             .thenReturn(Optional.of(customer));
 
@@ -83,13 +84,15 @@ class CustomerServiceTest {
         int id = 20;
         String email = FAKER.internet().safeEmailAddress();
         String name = FAKER.name().fullName();
+        Gender gender = Gender.MALE;
 
         when(customerDao.existsCustomerWithEmail(email)).thenReturn(false);
 
         CustomerRegistrationRequest customerRegistrationRequest = new CustomerRegistrationRequest(
             name,
             email,
-            12);
+            12,
+            gender);
 
         //When
         underTest.addCustomer(customerRegistrationRequest);
@@ -102,6 +105,7 @@ class CustomerServiceTest {
         assertThat(capturedCustomer.getName().equals(customerRegistrationRequest.name())).isTrue();
         assertThat(capturedCustomer.getEmail().equals(customerRegistrationRequest.email())).isTrue();
         assertThat(capturedCustomer.getAge().equals(customerRegistrationRequest.age())).isTrue();
+        assertThat(capturedCustomer.getGender().equals(customerRegistrationRequest.gender())).isTrue();
         assertThat(capturedCustomer.getId()).isNull();
     }
 
@@ -111,13 +115,14 @@ class CustomerServiceTest {
         int id = 20;
         String email = FAKER.internet().safeEmailAddress();
         String name = FAKER.name().fullName();
-
+        Gender gender = Gender.MALE;
         when(customerDao.existsCustomerWithEmail(email)).thenReturn(true);
 
         CustomerRegistrationRequest customerRegistrationRequest = new CustomerRegistrationRequest(
             name,
             email,
-            12);
+            12,
+            gender);
 
         //When
         assertThatThrownBy(() -> underTest.addCustomer(customerRegistrationRequest))
@@ -165,9 +170,10 @@ class CustomerServiceTest {
         int id = 20;
         String email = FAKER.internet().safeEmailAddress();
         String name = FAKER.name().fullName();
+        Gender gender = Gender.MALE;
         int age = 18;
 
-        Customer customer = new Customer(id, name, email, age);
+        Customer customer = new Customer(id, name, email, age, gender);
 
         when(customerDao.existsCustomerWithId(id))
             .thenReturn(true);
@@ -177,6 +183,7 @@ class CustomerServiceTest {
         String updatedName = "New Name";
         CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest(
             updatedName,
+            null,
             null,
             null
         );
@@ -192,6 +199,7 @@ class CustomerServiceTest {
         assertThat(actual.getName().equals(updatedName)).isTrue();
         assertThat(actual.getEmail().equals(email)).isTrue();
         assertThat(actual.getAge().equals(age)).isTrue();
+        assertThat(actual.getGender().equals(gender)).isTrue();
     }
 
     @Test
@@ -200,10 +208,11 @@ class CustomerServiceTest {
         int id = 20;
         String email = FAKER.internet().safeEmailAddress();
         String name = FAKER.name().fullName();
+        Gender gender = Gender.MALE;
         int age = 18;
         String updatedEmail = UUID.randomUUID().toString();
 
-        Customer customer = new Customer(id, name, email, age);
+        Customer customer = new Customer(id, name, email, age, gender);
 
         when(customerDao.existsCustomerWithId(id))
             .thenReturn(true);
@@ -215,6 +224,7 @@ class CustomerServiceTest {
         CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest(
             null,
             updatedEmail,
+            null,
             null
         );
 
@@ -229,6 +239,7 @@ class CustomerServiceTest {
         assertThat(actual.getName().equals(name)).isTrue();
         assertThat(actual.getEmail().equals(updatedEmail)).isTrue();
         assertThat(actual.getAge().equals(age)).isTrue();
+        assertThat(actual.getGender().equals(gender)).isTrue();
     }
 
     @Test
@@ -237,9 +248,10 @@ class CustomerServiceTest {
         int id = 20;
         String email = FAKER.internet().safeEmailAddress();
         String name = FAKER.name().fullName();
+        Gender gender = Gender.FEMALE;
         int age = 18;
 
-        Customer customer = new Customer(id, name, email, age);
+        Customer customer = new Customer(id, name, email, age, gender);
 
         when(customerDao.existsCustomerWithId(id))
             .thenReturn(true);
@@ -250,7 +262,8 @@ class CustomerServiceTest {
         CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest(
             null,
             null,
-            updatedAge
+            updatedAge,
+            null
         );
 
         //When
@@ -264,6 +277,46 @@ class CustomerServiceTest {
         assertThat(actual.getName().equals(name)).isTrue();
         assertThat(actual.getEmail().equals(email)).isTrue();
         assertThat(actual.getAge().equals(updatedAge)).isTrue();
+        assertThat(actual.getGender().equals(gender)).isTrue();
+    }
+
+    @Test
+    void updateCustomerByIdWithGenderChange() {
+        //Given
+        int id = 20;
+        String email = FAKER.internet().safeEmailAddress();
+        String name = FAKER.name().fullName();
+        Gender gender = Gender.FEMALE;
+        Gender updatedGender = Gender.MALE;
+        int age = 18;
+
+        Customer customer = new Customer(id, name, email, age, gender);
+
+        when(customerDao.existsCustomerWithId(id))
+            .thenReturn(true);
+        when(customerDao.selectCustomerById(id))
+            .thenReturn(Optional.of(customer));
+
+        int updatedAge = 22;
+        CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest(
+            null,
+            null,
+            null,
+            updatedGender
+        );
+
+        //When
+        underTest.updateCustomerById(customerUpdateRequest, id);
+
+        //Then
+        ArgumentCaptor<Customer> customerArgumentCaptor = ArgumentCaptor.forClass(Customer.class);
+        verify(customerDao).updateCustomer(customerArgumentCaptor.capture());
+        Customer actual = customerArgumentCaptor.getValue();
+
+        assertThat(actual.getName().equals(name)).isTrue();
+        assertThat(actual.getEmail().equals(email)).isTrue();
+        assertThat(actual.getAge().equals(age)).isTrue();
+        assertThat(actual.getGender().equals(updatedGender)).isTrue();
     }
 
     @Test
@@ -272,13 +325,14 @@ class CustomerServiceTest {
         int id = 20;
         String email = FAKER.internet().safeEmailAddress();
         String name = FAKER.name().fullName();
+        Gender gender = Gender.FEMALE;
         int age = 18;
 
         int updatedAge = 22;
         String updatedName = "New Name";
         String updatedEmail = UUID.randomUUID().toString();
 
-        Customer customer = new Customer(id, name, email, age);
+        Customer customer = new Customer(id, name, email, age, gender);
 
         when(customerDao.existsCustomerWithId(id))
             .thenReturn(true);
@@ -291,7 +345,8 @@ class CustomerServiceTest {
         CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest(
             updatedName,
             updatedEmail,
-            updatedAge
+            updatedAge,
+            gender
         );
 
         //When
@@ -305,19 +360,21 @@ class CustomerServiceTest {
         assertThat(actual.getName().equals(updatedName)).isTrue();
         assertThat(actual.getEmail().equals(updatedEmail)).isTrue();
         assertThat(actual.getAge().equals(updatedAge)).isTrue();
+        assertThat(actual.getGender().equals(gender)).isTrue();
     }
 
     @Test
-    void updateCustomerByIdWithNoChangeThrowsException() {
+    void updateCustomerByIdWithExistingEmailhrowsException() {
         //Given
         int id = 20;
         String email = FAKER.internet().safeEmailAddress();
         String name = FAKER.name().fullName();
+        Gender gender = Gender.FEMALE;
         int age = 18;
 
         String updatedEmail = UUID.randomUUID().toString();
 
-        Customer customer = new Customer(id, name, email, age);
+        Customer customer = new Customer(id, name, email, age,gender);
 
         when(customerDao.existsCustomerWithId(id))
             .thenReturn(true);
@@ -330,6 +387,7 @@ class CustomerServiceTest {
         CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest(
             null,
             updatedEmail,
+            null,
             null
         );
 
@@ -343,14 +401,15 @@ class CustomerServiceTest {
     }
 
     @Test
-    void updateCustomerByIdWithExistingEmailhrowsException() {
+    void updateCustomerByIdWithNoChangeThrowsException() {
         //Given
         int id = 20;
         String email = FAKER.internet().safeEmailAddress();
         String name = FAKER.name().fullName();
+        Gender gender = Gender.FEMALE;
         int age = 18;
 
-        Customer customer = new Customer(id, name, email, age);
+        Customer customer = new Customer(id, name, email, age,gender);
 
         when(customerDao.existsCustomerWithId(id))
             .thenReturn(true);
@@ -359,6 +418,7 @@ class CustomerServiceTest {
 
         int updatedAge = 22;
         CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest(
+            null,
             null,
             null,
             null
@@ -386,6 +446,7 @@ class CustomerServiceTest {
 
         int updatedAge = 22;
         CustomerUpdateRequest customerUpdateRequest = new CustomerUpdateRequest(
+            null,
             null,
             null,
             null
