@@ -3,7 +3,7 @@
   "containerDefinitions": [
     {
       "name": "divineaura-api",
-      "image": "vickymaya/divineaura-api:latest",
+      "image": "vickymaya/divineaura-api:05.06.2023.09.31.34",
       "essential": true,
       "memory": 512,
       "portMappings": [
