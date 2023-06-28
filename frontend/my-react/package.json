@@ -10,12 +10,14 @@
     "@testing-library/user-event": "^14.4.3",
     "axios": "^1.4.0",
     "dotenv": "^16.1.1",
+    "formik": "^2.4.1",
     "framer-motion": "^10.12.16",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.9.0",
     "react-scripts": "^5.0.1",
-    "web-vitals": "^3.3.2"
+    "web-vitals": "^3.3.2",
+    "yup": "^1.2.0"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -14,3 +14,28 @@ export const getCustomers = async () => {
         throw e;
     }
 }
+
+export const saveCustomer = async (customer) => {
+    try{
+        return (await axios.post(customersEndpoint, customer));
+    } catch (e) {
+        throw e;
+    }
+}
+
+export const updateCustomer = async (customerId, customer) => {
+    try{
+        return (await axios.put(customersEndpoint.concat("/", customerId), customer));
+    } catch (e) {
+        throw e;
+    }
+}
+
+export const deleteCustomer = async (customerId) => {
+    try {
+        return (await axios.delete(customersEndpoint.concat("/",customerId)))
+    }
+    catch (e) {
+        throw e;
+    }
+}
