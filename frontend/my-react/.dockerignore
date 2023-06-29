@@ -1,0 +1,5 @@
+node_modules
+Dockerfile
+.java-version
+.env
+.dockerignore

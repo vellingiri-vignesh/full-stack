@@ -41,6 +41,16 @@ services:
     depends_on:
       - db
     restart: unless-stopped
+  divineaura-react:
+    container_name: divineaura-react
+    image: vickymaya/divineaura-react
+    build:
+      context: frontend/my-react
+    ports:
+      - "3000:3000"
+    depends_on:
+      - divineaura-api
+    restart: unless-stopped
 
 networks:
   postgres:
