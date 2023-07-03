@@ -25,6 +25,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @ExtendWith(MockitoExtension.class)
 class CustomerServiceTest {
@@ -32,11 +33,13 @@ class CustomerServiceTest {
     private CustomerService underTest;
     @Mock
     private CustomerDao customerDao;
+    @Mock
+    private PasswordEncoder passwordEncoder;
     private Faker FAKER = new Faker();
 
     @BeforeEach
     void setUp() {
-        underTest = new CustomerService(customerDao);
+        underTest = new CustomerService(customerDao, passwordEncoder);
     }
 
     @Test
@@ -52,7 +55,8 @@ class CustomerServiceTest {
     void getCustomerById() {
         //Given
         int id = 2;
-        Customer customer = new Customer(id, FAKER.name().fullName(), FAKER.internet().safeEmailAddress(), 12, Gender.FEMALE);
+        Customer customer = new Customer(id, FAKER.name().fullName(), FAKER.internet().safeEmailAddress(), "password",
+            12, Gender.FEMALE);
         when(customerDao.selectCustomerById(id))
             .thenReturn(Optional.of(customer));
 
@@ -91,8 +95,11 @@ class CustomerServiceTest {
         CustomerRegistrationRequest customerRegistrationRequest = new CustomerRegistrationRequest(
             name,
             email,
-            12,
+            "password", 12,
             gender);
+
+        var passwordHash = "@#FC5562Sdd";
+        when(passwordEncoder.encode(customerRegistrationRequest.password())).thenReturn(passwordHash);
 
         //When
         underTest.addCustomer(customerRegistrationRequest);
@@ -104,6 +111,7 @@ class CustomerServiceTest {
 
         assertThat(capturedCustomer.getName().equals(customerRegistrationRequest.name())).isTrue();
         assertThat(capturedCustomer.getEmail().equals(customerRegistrationRequest.email())).isTrue();
+        assertThat(capturedCustomer.getPassword().equals(passwordHash)).isTrue();
         assertThat(capturedCustomer.getAge().equals(customerRegistrationRequest.age())).isTrue();
         assertThat(capturedCustomer.getGender().equals(customerRegistrationRequest.gender())).isTrue();
         assertThat(capturedCustomer.getId()).isNull();
@@ -121,7 +129,7 @@ class CustomerServiceTest {
         CustomerRegistrationRequest customerRegistrationRequest = new CustomerRegistrationRequest(
             name,
             email,
-            12,
+            "password", 12,
             gender);
 
         //When
@@ -173,7 +181,7 @@ class CustomerServiceTest {
         Gender gender = Gender.MALE;
         int age = 18;
 
-        Customer customer = new Customer(id, name, email, age, gender);
+        Customer customer = new Customer(id, name, email, "password", age, gender);
 
         when(customerDao.existsCustomerWithId(id))
             .thenReturn(true);
@@ -212,7 +220,7 @@ class CustomerServiceTest {
         int age = 18;
         String updatedEmail = UUID.randomUUID().toString();
 
-        Customer customer = new Customer(id, name, email, age, gender);
+        Customer customer = new Customer(id, name, email, "password", age, gender);
 
         when(customerDao.existsCustomerWithId(id))
             .thenReturn(true);
@@ -251,7 +259,7 @@ class CustomerServiceTest {
         Gender gender = Gender.FEMALE;
         int age = 18;
 
-        Customer customer = new Customer(id, name, email, age, gender);
+        Customer customer = new Customer(id, name, email, "password", age, gender);
 
         when(customerDao.existsCustomerWithId(id))
             .thenReturn(true);
@@ -290,7 +298,7 @@ class CustomerServiceTest {
         Gender updatedGender = Gender.MALE;
         int age = 18;
 
-        Customer customer = new Customer(id, name, email, age, gender);
+        Customer customer = new Customer(id, name, email, "password", age, gender);
 
         when(customerDao.existsCustomerWithId(id))
             .thenReturn(true);
@@ -332,7 +340,7 @@ class CustomerServiceTest {
         String updatedName = "New Name";
         String updatedEmail = UUID.randomUUID().toString();
 
-        Customer customer = new Customer(id, name, email, age, gender);
+        Customer customer = new Customer(id, name, email, "password", age, gender);
 
         when(customerDao.existsCustomerWithId(id))
             .thenReturn(true);
@@ -374,7 +382,7 @@ class CustomerServiceTest {
 
         String updatedEmail = UUID.randomUUID().toString();
 
-        Customer customer = new Customer(id, name, email, age,gender);
+        Customer customer = new Customer(id, name, email, "password", age,gender);
 
         when(customerDao.existsCustomerWithId(id))
             .thenReturn(true);
@@ -409,7 +417,7 @@ class CustomerServiceTest {
         Gender gender = Gender.FEMALE;
         int age = 18;
 
-        Customer customer = new Customer(id, name, email, age,gender);
+        Customer customer = new Customer(id, name, email, "password", age,gender);
 
         when(customerDao.existsCustomerWithId(id))
             .thenReturn(true);

@@ -38,7 +38,7 @@ class CustomerIntegrationTest {
             new CustomerRegistrationRequest(
                 name,
                 email,
-                age,
+                "password", age,
                 gender
             );
 
@@ -65,7 +65,7 @@ class CustomerIntegrationTest {
             .getResponseBody();
 
         // Make sure that Customer is present
-        Customer expected = new Customer(name, email, age, gender);
+        Customer expected = new Customer(name, email, "password", age, gender);
         assertThat(allCustomers)
             .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id")
             .contains(expected);
@@ -104,7 +104,7 @@ class CustomerIntegrationTest {
             new CustomerRegistrationRequest(
                 name,
                 email,
-                age,
+                "password", age,
                 gender
             );
 
@@ -171,7 +171,7 @@ class CustomerIntegrationTest {
             new CustomerRegistrationRequest(
                 name,
                 email,
-                age,
+                "password", age,
                 gender
             );
 
@@ -218,7 +218,7 @@ class CustomerIntegrationTest {
             .isOk();
 
         // Get Customer By ID
-        var expected = new Customer(id, name, updatedEmail, age, gender);
+        var expected = new Customer(id, name, updatedEmail, "password", age, gender);
 
         Customer actual = webTestClient.get()
             .uri(CUSTOMER_URI + "/{id}", id)

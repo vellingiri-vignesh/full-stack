@@ -53,7 +53,8 @@ class CustomerJPADataAccessServiceTest {
     @Test
     void insertCustomer() {
         //Given
-        Customer customer = new Customer(FAKER.name().fullName(), FAKER.internet().safeEmailAddress(), 22, Gender.FEMALE);
+        Customer customer = new Customer(FAKER.name().fullName(), FAKER.internet().safeEmailAddress(), "password", 22, Gender.FEMALE
+        );
 
         //When
         underTest.insertCustomer(customer);
@@ -101,7 +102,8 @@ class CustomerJPADataAccessServiceTest {
     @Test
     void updateCustomer() {
         //Given
-        Customer customer = new Customer(FAKER.name().fullName(), FAKER.internet().safeEmailAddress(), 22, Gender.MALE);
+        Customer customer = new Customer(FAKER.name().fullName(), FAKER.internet().safeEmailAddress(), "password", 22, Gender.MALE
+        );
 
         //When
         underTest.updateCustomer(customer);

@@ -6,6 +6,7 @@ import com.divineaura.customer.Gender;
 import com.github.javafaker.Faker;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -13,6 +14,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 public class Main {
@@ -23,14 +25,15 @@ public class Main {
     }
 
     @Bean
-    CommandLineRunner runner(CustomerRepository customerRepository) {
+    CommandLineRunner runner(CustomerRepository customerRepository,
+                             PasswordEncoder passwordEncoder) {
         Random random = new Random();
         Faker fakerCustOne = new Faker();
         int age = random.nextInt(14, 80);
         Gender gender = (age%2 ==0) ? Gender.FEMALE : Gender.FEMALE;
         Customer custOne = new Customer( fakerCustOne.name().fullName(),
             fakerCustOne.internet().safeEmailAddress(),
-            age,
+            passwordEncoder.encode(UUID.randomUUID().toString()), age,
             gender);
         List<Customer> customers = List.of(custOne);
         return args -> {

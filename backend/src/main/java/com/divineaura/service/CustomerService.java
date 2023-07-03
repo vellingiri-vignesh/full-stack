@@ -9,14 +9,18 @@ import com.divineaura.exception.RequestValidationException;
 import com.divineaura.exception.ResourceNotFoundException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service()
 public class CustomerService {
     private final CustomerDao customerDao;
 
-    public CustomerService(@Qualifier("jdbc") CustomerDao customerDao) {
+    private final PasswordEncoder passwordEncoder;
+
+    public CustomerService(@Qualifier("jdbc") CustomerDao customerDao, PasswordEncoder passwordEncoder) {
         this.customerDao = customerDao;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<Customer> getAllCustomers() {
@@ -33,7 +37,7 @@ public class CustomerService {
             throw new DuplicateResourceException("Customer with email already exists...");
         }
         customerDao.insertCustomer(new Customer(customerRegistrationRequest.name(), customerRegistrationRequest.email(),
-            customerRegistrationRequest.age(), customerRegistrationRequest.gender()));
+            passwordEncoder.encode(customerRegistrationRequest.password()), customerRegistrationRequest.age(), customerRegistrationRequest.gender()));
 
     }
 
