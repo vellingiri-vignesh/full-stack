@@ -46,6 +46,8 @@ services:
     image: vickymaya/divineaura-react
     build:
       context: frontend/my-react
+      args:
+        api_base_url: http://localhost:8084
     ports:
       - "3000:3000"
     depends_on:
