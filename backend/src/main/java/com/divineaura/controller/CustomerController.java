@@ -1,5 +1,6 @@
 package com.divineaura.controller;
 
+import com.divineaura.customer.CustomerDTO;
 import com.divineaura.customer.CustomerRegistrationRequest;
 import com.divineaura.customer.CustomerUpdateRequest;
 import com.divineaura.jwt.JWTUtil;
@@ -29,12 +30,12 @@ public class CustomerController {
     }
 
     @GetMapping
-    public List<com.divineaura.customer.Customer> getCustomers(){
+    public List<CustomerDTO> getCustomers(){
         return customerService.getAllCustomers();
     }
 
     @GetMapping("/{customerId}")
-    public com.divineaura.customer.Customer getCustomer(@PathVariable(name = "customerId", required = true) Integer customerId){
+    public CustomerDTO getCustomer(@PathVariable(name = "customerId", required = true) Integer customerId){
         return customerService.getCustomerById(customerId);
     }
 

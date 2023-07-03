@@ -9,6 +9,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.divineaura.customer.Customer;
+import com.divineaura.customer.CustomerDTO;
+import com.divineaura.customer.CustomerDTOMapper;
 import com.divineaura.customer.CustomerDao;
 import com.divineaura.customer.CustomerRegistrationRequest;
 import com.divineaura.customer.CustomerUpdateRequest;
@@ -36,10 +38,11 @@ class CustomerServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
     private Faker FAKER = new Faker();
+    private final CustomerDTOMapper customerDTOMapper = new CustomerDTOMapper();
 
     @BeforeEach
     void setUp() {
-        underTest = new CustomerService(customerDao, passwordEncoder);
+        underTest = new CustomerService(customerDao, customerDTOMapper, passwordEncoder);
     }
 
     @Test
@@ -61,10 +64,11 @@ class CustomerServiceTest {
             .thenReturn(Optional.of(customer));
 
         //When
-        Customer actual = underTest.getCustomerById(2);
+        CustomerDTO actual = underTest.getCustomerById(2);
+        CustomerDTO expected = customerDTOMapper.apply(customer);
 
         //Then
-        assertThat(actual).isEqualTo(customer);
+        assertThat(actual).isEqualTo(expected);
         verify(customerDao).selectCustomerById(id);
     }
 
