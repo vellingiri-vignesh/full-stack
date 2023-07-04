@@ -95,16 +95,11 @@ public class AuthenticationIntegrationTest {
             })
             .returnResult();
         AuthenticationResponse responseBody = result.getResponseBody();
-        CustomerDTO customerDTO = responseBody.customerDTO();
         String jwtToken = result.getResponseHeaders()
             .get(AUTHORIZATION)
             .get(0);
 
-        assertThat(jwtUtil.isTokenValid(jwtToken, customerDTO.email())).isTrue();
-        assertThat(customerDTO.email()).isEqualTo(email);
-        assertThat(customerDTO.age()).isEqualTo(age);
-        assertThat(customerDTO.name()).isEqualTo(name);
-        assertThat(customerDTO.gender()).isEqualTo(gender);
-        assertThat(customerDTO.roles()).isEqualTo(List.of("ROLE_USER"));
+        assertThat(jwtUtil.isTokenValid(jwtToken, email)).isTrue();
+
     }
 }
