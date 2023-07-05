@@ -6,13 +6,11 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import com.divineaura.auth.AuthenticationRequest;
 import com.divineaura.auth.AuthenticationResponse;
-import com.divineaura.customer.CustomerDTO;
 import com.divineaura.customer.CustomerRegistrationRequest;
 import com.divineaura.customer.CustomerUpdateRequest;
 import com.divineaura.customer.Gender;
 import com.divineaura.jwt.JWTUtil;
 import com.github.javafaker.Faker;
-import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

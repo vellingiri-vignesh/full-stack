@@ -216,8 +216,8 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestContainer {
         assertThat(actual).isFalse();
     }
 
-//    @Test
 //    TODO: Uncomment after fixing Hikari connection pool size with testContainer
+    @Test
     void updateCustomerEmail() {
         //Given
         String email = FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID();
