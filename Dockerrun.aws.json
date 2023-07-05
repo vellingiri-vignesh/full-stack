@@ -21,7 +21,7 @@
     },
     {
       "name": "divineaura-api",
-      "image": "vickymaya/divineaura-api:05.07.2023.05.58.50",
+      "image": "vickymaya/divineaura-api:05.07.2023.06.39.47",
       "essential": true,
       "memory": 512,
       "portMappings": [
