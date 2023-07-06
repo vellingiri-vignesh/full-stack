@@ -1,25 +1,27 @@
 import {
-    Heading,
+    AlertDialog,
+    AlertDialogBody,
+    AlertDialogContent,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogOverlay,
     Avatar,
     Box,
-    Center,
-    Image,
-    Flex,
-    Text,
-    Stack,
-    useColorModeValue,
-    Tag,
     Button,
-    AlertDialog,
-    AlertDialogOverlay,
-    AlertDialogContent,
-    AlertDialogHeader,
-    AlertDialogBody, AlertDialogFooter, useDisclosure,
+    Center,
+    Flex,
+    Heading,
+    Image,
+    Stack,
+    Tag,
+    Text,
+    useColorModeValue,
+    useDisclosure,
 } from '@chakra-ui/react';
-import {deleteCustomer, getProfilePictureUrl} from "../services/client";
-import { useRef} from "react";
-import {errorNotification, successNotification} from "../services/notification";
-import UpdateCustomerDrawer from "./customer/UpdateCustomerDrawer";
+import {deleteCustomer, getProfilePictureUrl} from "../../services/client";
+import {useRef} from "react";
+import {errorNotification, successNotification} from "../../services/notification";
+import UpdateCustomerDrawer from "./UpdateCustomerDrawer";
 
 export default function CardWithImage(props) {
     var gender = props.gender === 'MALE' ? 'men' : 'women'

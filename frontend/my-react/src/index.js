@@ -2,17 +2,43 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {ChakraProvider} from '@chakra-ui/react'
-import { createStandaloneToast } from '@chakra-ui/react'
+import {ChakraProvider, createStandaloneToast} from '@chakra-ui/react'
+import {createBrowserRouter, RouterProvider, useRouteError} from "react-router-dom";
+import Login from "./comonents/login/Login";
+import AuthProvider from "./comonents/context/AuthContext";
+import ProtectedRoute from "./comonents/shared/ProtectedRoute";
 
-const { ToastContainer } = createStandaloneToast()
+
+const {ToastContainer} = createStandaloneToast()
+const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <Login/>,
+        errorElement: <ErrorBoundary/>
+    },
+    {
+        path: "dashboard",
+        element: <ProtectedRoute>
+            <App/>
+        </ProtectedRoute>
+    }
+])
+
+function ErrorBoundary() {
+    let error = useRouteError();
+    console.error(error);
+    // Uncaught ReferenceError: path is not defined
+    return <div>Error loading the page!</div>;
+}
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
         <ChakraProvider>
-            <App/>
-            <ToastContainer />
+            <AuthProvider>
+                <RouterProvider router={router}/>
+            </AuthProvider>
+            <ToastContainer/>
         </ChakraProvider>
     </React.StrictMode>
 );

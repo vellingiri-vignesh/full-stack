@@ -3,11 +3,14 @@ import {
     Drawer,
     DrawerBody,
     DrawerCloseButton,
-    DrawerContent, DrawerFooter,
+    DrawerContent,
+    DrawerFooter,
     DrawerHeader,
-    DrawerOverlay, useDisclosure
+    DrawerOverlay,
+    useDisclosure
 } from "@chakra-ui/react";
 import UpdateCustomerForm from "./UpdateCustomerForm";
+
 const CloseIcon = () => "x";
 const UpdateCustomerDrawer = ({fetchCustomers, initialValues, customerId}) => {
     const { isOpen, onOpen, onClose } = useDisclosure()

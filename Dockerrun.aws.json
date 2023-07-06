@@ -11,12 +11,6 @@
           "hostPort": 80,
           "containerPort": 3000
         }
-      ],
-      "environment": [
-        {
-          "name": "SPRING_DATASOURCE_URL",
-          "value": "jdbc:postgresql://awseb-e-snumppmmmk-stack-awsebrdsdatabase-wl3pda9ruvus.csripya6jgsa.ap-south-1.rds.amazonaws.com:5432/customer"
-        }
       ]
     },
     {

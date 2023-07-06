@@ -2606,6 +2606,11 @@
   resolved "https://packages.atlassian.com/api/npm/npm-remote/@popperjs/core/-/core-2.11.8.tgz"
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
 
+"@remix-run/router@1.7.1":
+  version "1.7.1"
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/@remix-run/router/-/router-1.7.1.tgz#fea7ac35ae4014637c130011f59428f618730498"
+  integrity sha512-bgVQM4ZJ2u2CM8k1ey70o1ePFXsEzYVZoWghh6WjM8p59jQ7HxzbHW4SbnWFG7V9ig9chLawQxDTZ3xzOF8MkQ==
+
 "@rollup/plugin-babel@^5.2.0":
   version "5.3.1"
   resolved "https://registry.npmjs.org/@rollup/plugin-babel/-/plugin-babel-5.3.1.tgz"
@@ -7177,6 +7182,11 @@ jsonpointer@^5.0.0:
     array-includes "^3.1.5"
     object.assign "^4.1.3"
 
+jwt-decode@^3.1.2:
+  version "3.1.2"
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/jwt-decode/-/jwt-decode-3.1.2.tgz#3fb319f3675a2df0c2895c8f5e9fa4b67b04ed59"
+  integrity sha512-UfpWE/VZn0iP50d8cz9NrZLM9lSWhcJ+0Gt/nm4by88UL+J1SiKN8/5dkjMmbEzwL2CAe+67GsegCbIKtbp75A==
+
 kind-of@^6.0.2:
   version "6.0.3"
   resolved "https://packages.atlassian.com/api/npm/npm-remote/kind-of/-/kind-of-6.0.3.tgz"
@@ -8765,6 +8775,21 @@ react-remove-scroll@^2.5.5:
     tslib "^2.1.0"
     use-callback-ref "^1.3.0"
     use-sidecar "^1.1.2"
+
+react-router-dom@6.14.1:
+  version "6.14.1"
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/react-router-dom/-/react-router-dom-6.14.1.tgz#0ad7ba7abdf75baa61169d49f096f0494907a36f"
+  integrity sha512-ssF6M5UkQjHK70fgukCJyjlda0Dgono2QGwqGvuk7D+EDGHdacEN3Yke2LTMjkrpHuFwBfDFsEjGVXBDmL+bWw==
+  dependencies:
+    "@remix-run/router" "1.7.1"
+    react-router "6.14.1"
+
+react-router@6.14.1:
+  version "6.14.1"
+  resolved "https://packages.atlassian.com/api/npm/npm-remote/react-router/-/react-router-6.14.1.tgz#5e82bcdabf21add859dc04b1859f91066b3a5810"
+  integrity sha512-U4PfgvG55LdvbQjg5Y9QRWyVxIdO1LlpYT7x+tMAxd9/vmiPuJhIwdxZuIQLN/9e3O4KFDHYfR9gzGeYMasW8g==
+  dependencies:
+    "@remix-run/router" "1.7.1"
 
 react-scripts@^5.0.1:
   version "5.0.1"

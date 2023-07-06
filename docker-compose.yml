@@ -31,7 +31,7 @@ services:
       - db
   divineaura-api:
     container_name: divineaura-api
-    image: vickymaya/divineaura-api
+    image: vickymaya/divineaura-api:latest
     environment:
       SPRING_DATASOURCE_URL : "jdbc:postgresql://db:5432/customer"
     ports:
@@ -43,7 +43,7 @@ services:
     restart: unless-stopped
   divineaura-react:
     container_name: divineaura-react
-    image: vickymaya/divineaura-react
+    image: vickymaya/divineaura-react:latest
     build:
       context: frontend/my-react
       args:
