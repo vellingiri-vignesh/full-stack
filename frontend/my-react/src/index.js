@@ -7,6 +7,7 @@ import {createBrowserRouter, RouterProvider, useRouteError} from "react-router-d
 import Login from "./comonents/login/Login";
 import AuthProvider from "./comonents/context/AuthContext";
 import ProtectedRoute from "./comonents/shared/ProtectedRoute";
+import Signup from "./comonents/signup/Signup";
 
 
 const {ToastContainer} = createStandaloneToast()
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
         path: "/",
         element: <Login/>,
         errorElement: <ErrorBoundary/>
+    },
+    {
+        path: "/signup",
+        element: <Signup/>,
     },
     {
         path: "dashboard",

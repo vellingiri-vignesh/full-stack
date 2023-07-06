@@ -1,4 +1,4 @@
-import {Alert, AlertIcon, Box, Button, Flex, FormLabel, Heading, Image, Input, Stack,} from '@chakra-ui/react';
+import {Alert, AlertIcon, Box, Button, Flex, FormLabel, Heading, Image, Input, Link, Stack,} from '@chakra-ui/react';
 import {Form, Formik, useField} from "formik";
 import * as Yup from 'yup';
 import {errorNotification} from "../../services/notification";
@@ -91,6 +91,9 @@ const Login = () => {
             <Stack spacing={4} w={'full'} maxW={'md'}>
                 <Heading fontSize={'2xl'} mb={5}>Sign in to your account</Heading>
                 <LoginForm/>
+                <Link color={"blue.500"} href={"/signup"}>
+                    Dont have an account? Signup now.
+                </Link>
 
             </Stack>
         </Flex>

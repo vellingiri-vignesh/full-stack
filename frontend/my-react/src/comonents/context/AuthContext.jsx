@@ -9,7 +9,6 @@ const AuthProvider = ({children}) => {
     const [customer, setCustomer] = useState(null);
 
     const setCustomerFromToken = () => {
-
         let token = localStorage.getItem('access_token')
         if(token) {
             const decodedToken = jwtDecode(token);
@@ -68,7 +67,8 @@ const AuthProvider = ({children}) => {
             customer,
             login,
             logout,
-            isCustomerAuthenticated
+            isCustomerAuthenticated,
+            setCustomerFromToken
         }}>
             {children}
         </AuthContext.Provider>
