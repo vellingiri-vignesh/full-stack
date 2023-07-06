@@ -2,32 +2,20 @@
   "AWSEBDockerrunVersion": 2,
   "containerDefinitions": [
     {
-      "name": "divineaura-react",
-      "image": "vickymaya/divineaura-react:latest",
-      "essential": true,
-      "memory": 256,
-      "portMappings": [
-        {
-          "hostPort": 80,
-          "containerPort": 3000
-        }
-      ]
-    },
-    {
       "name": "divineaura-api",
       "image": "vickymaya/divineaura-api:05.07.2023.06.39.47",
       "essential": true,
       "memory": 512,
       "portMappings": [
         {
-          "hostPort": 8080,
+          "hostPort": 80,
           "containerPort": 8082
         }
       ],
       "environment": [
         {
           "name": "SPRING_DATASOURCE_URL",
-          "value": "jdbc:postgresql://awseb-e-zkzgs45fcu-stack-awsebrdsdatabase-iehjemc6kcp9.csripya6jgsa.ap-south-1.rds.amazonaws.com:5432/customer"
+          "value": "jdbc:postgresql://awseb-e-u3fkvpvc8b-stack-awsebrdsdatabase-3faoefqm5xkr.csripya6jgsa.ap-south-1.rds.amazonaws.com:5432/customer"
         }
       ]
     }
