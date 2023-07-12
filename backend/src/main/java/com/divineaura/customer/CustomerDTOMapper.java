@@ -21,6 +21,7 @@ public class CustomerDTOMapper implements Function<Customer, CustomerDTO> {
                 customer.getGender(),
                 customer.getAge(),
                 customer.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()),
-                customer.getUsername());
+                customer.getUsername(),
+                customer.getProfileImageId());
     }
 }

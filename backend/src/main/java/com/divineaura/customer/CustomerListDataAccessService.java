@@ -12,9 +12,9 @@ public class CustomerListDataAccessService implements CustomerDao{
     private int nextId = 0;
 
      {
-        Customer anand = new Customer(++nextId, "Anand" , "anand@hotmail.com", "password", 18, Gender.MALE);
+        Customer anand = new Customer(++nextId, "Anand" , "anand@hotmail.com", "password", 18, Gender.MALE, "");
         customers.add(anand);
-        Customer saki = new Customer(++nextId, "Saki" , "saki@hotmail.com", "password", 16, Gender.FEMALE);
+        Customer saki = new Customer(++nextId, "Saki" , "saki@hotmail.com", "password", 16, Gender.FEMALE, "");
         customers.add(saki);
     }
 
@@ -73,5 +73,17 @@ public class CustomerListDataAccessService implements CustomerDao{
         return customers.stream()
             .filter(c -> c.getUsername().equals(email))
             .findFirst();
+    }
+
+    @Override
+    public void updateCustomerProfileImageId(Integer customerId, String profileImageId) {
+        for (int i = 0; i < customers.size(); i++) {
+            if (customers.get(i).getId().equals(customerId)) {
+                Customer c = customers.get(i);
+                c.setProfileImageId(profileImageId);
+                customers.set(i, c);
+                break;
+            }
+        }
     }
 }

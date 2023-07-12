@@ -350,4 +350,34 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestContainer {
                 assertThat(c.getEmail().equals(customer.getEmail()));
             });
     }
+
+    @Test
+    void canUpdateProfileImageId() {
+        //Given
+        String profileImageId = "test";
+        String email = FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID();
+        Customer customer = new Customer(
+            FAKER.name().fullName(),
+            email,
+            "password", 22,
+            Gender.FEMALE
+        );
+        underTest.insertCustomer(customer);
+        Integer customerID = underTest.selectAllCustomers()
+            .stream()
+            .filter(c -> c.getEmail().equals(email))
+            .map(Customer::getId)
+            .findFirst()
+            .orElseThrow();
+        customer.setId(customerID);
+
+
+        //When
+        underTest.updateCustomerProfileImageId(customerID, profileImageId);
+
+        //Then
+        Optional<Customer> actual = underTest.selectCustomerById(customerID);
+        assertThat(actual).isPresent()
+            .hasValueSatisfying(c -> assertThat(c.getProfileImageId()).isEqualTo(profileImageId));
+    }
 }

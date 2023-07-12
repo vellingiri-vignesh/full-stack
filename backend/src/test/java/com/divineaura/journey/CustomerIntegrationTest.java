@@ -8,14 +8,21 @@ import com.divineaura.customer.CustomerRegistrationRequest;
 import com.divineaura.customer.CustomerUpdateRequest;
 import com.divineaura.customer.Gender;
 import com.github.javafaker.Faker;
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.reactive.function.BodyInserter;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.testcontainers.shaded.com.google.common.io.Files;
 import reactor.core.publisher.Mono;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -39,6 +46,7 @@ class CustomerIntegrationTest {
             .get(AUTHORIZATION)
             .get(0);
     }
+
     @Test
     void CanRegisterCustomer() {
         // Create a registration Request
@@ -82,7 +90,7 @@ class CustomerIntegrationTest {
             .orElseThrow();
 
         // Make sure that Customer is present
-        CustomerDTO expectedCustomer = new CustomerDTO(id, name, email, gender, age, List.of("ROLE_USER"), email);
+        CustomerDTO expectedCustomer = new CustomerDTO(id, name, email, gender, age, List.of("ROLE_USER"), email, null);
 
         assertThat(allCustomers)
             .contains(expectedCustomer);
@@ -90,7 +98,7 @@ class CustomerIntegrationTest {
         webTestClient.get()
             .uri(CUSTOMER_URI + "/{id}", id)
             .accept(MediaType.APPLICATION_JSON)
-            .header(AUTHORIZATION,"Bearer " + jwtToken)
+            .header(AUTHORIZATION, "Bearer " + jwtToken)
             .exchange()
             .expectStatus()
             .isOk()
@@ -136,7 +144,7 @@ class CustomerIntegrationTest {
         List<CustomerDTO> allCustomers = webTestClient.get()
             .uri(CUSTOMER_URI)
             .accept(MediaType.APPLICATION_JSON)
-            .header(AUTHORIZATION,"Bearer " + jwtToken)
+            .header(AUTHORIZATION, "Bearer " + jwtToken)
             .exchange()
             .expectStatus()
             .isOk()
@@ -144,7 +152,6 @@ class CustomerIntegrationTest {
             })
             .returnResult()
             .getResponseBody();
-
 
 
         // Customer 2 Delete Customer By ID
@@ -158,7 +165,7 @@ class CustomerIntegrationTest {
         webTestClient.delete()
             .uri(CUSTOMER_URI + "/{id}", id)
             .accept(MediaType.APPLICATION_JSON)
-            .header(AUTHORIZATION,"Bearer " + jwtToken)
+            .header(AUTHORIZATION, "Bearer " + jwtToken)
             .exchange()
             .expectStatus()
             .isOk();
@@ -167,7 +174,7 @@ class CustomerIntegrationTest {
         webTestClient.get()
             .uri(CUSTOMER_URI + "/{id}", id)
             .accept(MediaType.APPLICATION_JSON)
-            .header(AUTHORIZATION,"Bearer " + jwtToken)
+            .header(AUTHORIZATION, "Bearer " + jwtToken)
             .exchange()
             .expectStatus()
             .isNotFound();
@@ -232,7 +239,7 @@ class CustomerIntegrationTest {
             .isOk();
 
         // Get Customer By ID
-        var expectedCustomer = new CustomerDTO(id, name, email, gender, updatedAge, List.of("ROLE_USER"), email);
+        var expectedCustomer = new CustomerDTO(id, name, email, gender, updatedAge, List.of("ROLE_USER"), email, null);
 
         CustomerDTO actual = webTestClient.get()
             .uri(CUSTOMER_URI + "/{id}", id)
@@ -248,5 +255,96 @@ class CustomerIntegrationTest {
 
         assertThat(actual).isEqualTo(expectedCustomer);
 
+    }
+
+    @Test
+    void canUploadAndDownloadProfileImage() throws IOException {
+        //Given
+        // Create a registration Request
+        Faker faker = new Faker();
+        int age = 20;
+        String name = faker.name().fullName();
+        Gender gender = Gender.MALE;
+        String email = faker.internet().safeEmailAddress() + "-"
+            + UUID.randomUUID()
+            + "foobar123@gmail.com";
+
+        CustomerRegistrationRequest customerRegistrationRequest =
+            new CustomerRegistrationRequest(
+                name,
+                email,
+                "password", age,
+                gender
+            );
+
+        // Send a POST request to API
+        String jwtToken = postCustomer(customerRegistrationRequest);
+
+        // Get all Customers from API
+        List<CustomerDTO> allCustomers = webTestClient.get()
+            .uri(CUSTOMER_URI)
+            .accept(MediaType.APPLICATION_JSON)
+            .header(AUTHORIZATION, "Bearer " + jwtToken)
+            .exchange()
+            .expectStatus()
+            .isOk()
+            .expectBodyList(new ParameterizedTypeReference<CustomerDTO>() {
+            })
+            .returnResult()
+            .getResponseBody();
+
+        // Update Customer By ID
+        assert allCustomers != null;
+        var customerDTO = allCustomers.stream()
+            .filter(c -> c.email().equals(email))
+            .findFirst()
+            .orElseThrow();
+
+        assertThat(customerDTO.profileImageId()).isNullOrEmpty();
+
+        Resource image = new ClassPathResource("%s.jpeg".formatted(gender.name().toLowerCase()));
+
+        MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
+        bodyBuilder.part("image", image);
+
+        //When
+        webTestClient.post()
+            .uri(CUSTOMER_URI + "/{customerId}/profile-image", customerDTO.id())
+            .body(BodyInserters.fromMultipartData(bodyBuilder.build()))
+            .header(AUTHORIZATION, "Bearer " + jwtToken)
+            .exchange()
+            .expectStatus()
+            .isOk();
+
+        //Then
+        // Profile imageId should be populated
+        String profileImageId = webTestClient.get()
+            .uri(CUSTOMER_URI + "/{id}", customerDTO.id())
+            .accept(MediaType.APPLICATION_JSON)
+            .header(AUTHORIZATION, "Bearer " + jwtToken)
+            .exchange()
+            .expectStatus()
+            .isOk()
+            .expectBody(CustomerDTO.class)
+            .returnResult()
+            .getResponseBody()
+            .profileImageId();
+
+        assertThat(profileImageId).isNotBlank();
+
+        // Download picture for customer
+        byte[] downloadedImage = webTestClient.get()
+            .uri(CUSTOMER_URI + "/{customerId}/profile-image", customerDTO.id())
+            .header(AUTHORIZATION, "Bearer " + jwtToken)
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus()
+            .isOk()
+            .expectBody(byte[].class)
+            .returnResult()
+            .getResponseBody();
+
+        byte[] actual = Files.toByteArray(image.getFile());
+        assertThat(actual).isEqualTo(downloadedImage);
     }
 }

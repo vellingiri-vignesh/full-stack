@@ -25,12 +25,26 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
-    show-sql: true
+    show-sql: false
   main:
     web-application-type: servlet
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 2MB
+  codec:
+    max-in-memory-size: 2MB
 
 management:
   endpoints:
     web:
       exposure:
         include: "health,info"
+
+aws:
+  region: "ap-south-1"
+  profile: "learning"
+  s3:
+    mock: true
+    buckets:
+      customer: "anand-fullstack"

@@ -20,7 +20,7 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
     @Override
     public List<Customer> selectAllCustomers() {
         var sql = """
-            SELECT id, name, email, password, age, gender FROM customer
+            SELECT id, name, email, password, age, gender, profile_image_id FROM customer
             """;
         List<Customer> customers = jdbcTemplate.query(sql, customerRowMapper);
         return customers;
@@ -29,21 +29,24 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
     @Override
     public Optional<Customer> selectCustomerById(Integer customerId) {
         var sql = """
-             SELECT id, name, email, password, age, gender FROM customer
+             SELECT id, name, email, password, age, gender, profile_image_id FROM customer
              WHERE id = ? 
             """;
         return jdbcTemplate.query(sql, customerRowMapper, customerId)
             .stream()
+            .peek((c) -> System.out.println(c))
             .findFirst();
     }
 
     @Override
     public void insertCustomer(Customer customer) {
         var sql = """
-            INSERT INTO customer(name, email, password, age, gender)
-             VALUES(?,?,?,?,?)
+            INSERT INTO customer(name, email, password, age, gender, profile_image_id)
+             VALUES(?,?,?,?,?,?)
             """;
-        int update = jdbcTemplate.update(sql, customer.getName(), customer.getEmail(), customer.getPassword(), customer.getAge(), customer.getGender().toString());
+        int update =
+            jdbcTemplate.update(sql, customer.getName(), customer.getEmail(), customer.getPassword(), customer.getAge(),
+                customer.getGender().toString(), customer.getProfileImageId());
         System.out.println("jdbc.insert result : " + update);
     }
 
@@ -98,7 +101,7 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
                 jdbcTemplate.update(sql, customer.getEmail(), customer.getId());
             System.out.println("jdbc.update email result : " + update);
         }
-        if (customer.getAge() != null && customer.getAge() !=0) {
+        if (customer.getAge() != null && customer.getAge() != 0) {
             var sql = """
                 UPDATE customer SET
                 age = ?
@@ -124,11 +127,23 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
     @Override
     public Optional<Customer> selectUserByEmail(String email) {
         var sql = """
-             SELECT id, name, email, password, age, gender FROM customer
+             SELECT id, name, email, password, age, gender, image_url FROM customer
              WHERE email = ? 
             """;
         return jdbcTemplate.query(sql, customerRowMapper, email)
             .stream()
             .findFirst();
+    }
+
+    @Override
+    public void updateCustomerProfileImageId(Integer customerId, String profileImageId) {
+        var sql = """
+            UPDATE customer SET
+            profile_image_id = ?
+            WHERE ID = ?
+            """;
+        int update =
+            jdbcTemplate.update(sql, profileImageId, customerId);
+        System.out.println("jdbc.update image_url result : " + update);
     }
 }

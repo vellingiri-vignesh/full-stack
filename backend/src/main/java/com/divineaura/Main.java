@@ -31,6 +31,7 @@ public class Main {
         Faker fakerCustOne = new Faker();
         int age = random.nextInt(14, 80);
         Gender gender = (age%2 ==0) ? Gender.FEMALE : Gender.FEMALE;
+        String profileImageId = UUID.randomUUID().toString();
         Customer custOne = new Customer( fakerCustOne.name().fullName(),
             fakerCustOne.internet().safeEmailAddress(),
             passwordEncoder.encode(UUID.randomUUID().toString()), age,

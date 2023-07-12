@@ -5,8 +5,10 @@ import com.divineaura.customer.CustomerRegistrationRequest;
 import com.divineaura.customer.CustomerUpdateRequest;
 import com.divineaura.jwt.JWTUtil;
 import com.divineaura.service.CustomerService;
+import com.divineaura.service.S3Service;
 import java.util.List;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("api/v1/customers")
@@ -24,9 +27,12 @@ public class CustomerController {
     private final CustomerService customerService;
     private final JWTUtil jwtUtil;
 
-    public CustomerController(CustomerService customerService, JWTUtil jwtUtil) {
+    private final S3Service s3Service;
+
+    public CustomerController(CustomerService customerService, JWTUtil jwtUtil, S3Service s3Service) {
         this.customerService = customerService;
         this.jwtUtil = jwtUtil;
+        this.s3Service = s3Service;
     }
 
     @GetMapping
@@ -59,5 +65,21 @@ public class CustomerController {
         @RequestBody CustomerUpdateRequest customerUpdateRequest
     ) {
         customerService.updateCustomerById(customerUpdateRequest, customerId);
+    }
+
+    @PostMapping("/{customerId}/profile-image")
+    public void uploadProfilePicture(
+        @PathVariable(name = "customerId") Integer customerId,
+        @RequestBody MultipartFile image
+    ){
+        customerService.uploadProfileImage(customerId, image);
+    }
+
+    @GetMapping("{customerId}/profile-image")
+    public ResponseEntity<byte[]> getProfilePicture(
+        @PathVariable(name = "customerId") Integer customerId
+    ){
+        byte[] profilePicture = customerService.getProfileImage(customerId);
+        return new ResponseEntity<>(profilePicture, HttpStatus.OK);
     }
 }

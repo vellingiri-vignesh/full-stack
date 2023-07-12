@@ -100,7 +100,7 @@ class CustomerJPADataAccessServiceTest {
     }
 
     @Test
-    void updateCustomer() {
+    void canUpdateCustomer() {
         //Given
         Customer customer = new Customer(FAKER.name().fullName(), FAKER.internet().safeEmailAddress(), "password", 22, Gender.MALE
         );
@@ -111,4 +111,19 @@ class CustomerJPADataAccessServiceTest {
         //Then
         verify(customerRepository).save(customer);
     }
+
+    @Test
+    void canUpdateProfileImageId() {
+        //Given
+        String profileImageId = "3132";
+        Integer customerId = 1;
+
+        //When
+        underTest.updateCustomerProfileImageId(customerId,profileImageId);
+
+        //Then
+        verify(customerRepository).updateProfileImageId(customerId,profileImageId);
+    }
+
+
 }

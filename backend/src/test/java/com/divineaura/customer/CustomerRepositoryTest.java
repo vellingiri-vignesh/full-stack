@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.divineaura.AbstractTestContainer;
 import com.divineaura.TestConfig;
+import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -102,5 +103,33 @@ class CustomerRepositoryTest extends AbstractTestContainer {
 
         //Then
         assertThat(actual).isFalse();
+    }
+
+    @Test
+    void canUpdateProfileImageId() {
+        //Given
+        String email = FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID();
+        Customer customer = new Customer(
+            FAKER.name().fullName(),
+            email,
+            "password", 22,
+            Gender.FEMALE
+        );
+        underTest.save(customer);
+        Integer customerId = underTest.findAll().stream()
+            .filter(c -> c.getEmail().equals(email))
+            .map(Customer::getId)
+            .findFirst()
+            .orElseThrow();
+
+
+        //When
+        String profileImageId = "test";
+        underTest.updateProfileImageId(customerId, profileImageId);
+
+        //Then
+        Optional<Customer> actual = underTest.findById(customerId);
+        assertThat(actual).isPresent()
+            .hasValueSatisfying(c -> assertThat(c.getProfileImageId()).isEqualTo(profileImageId));
     }
 }
