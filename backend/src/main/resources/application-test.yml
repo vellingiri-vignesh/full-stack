@@ -1,0 +1,9 @@
+aws:
+  s3:
+    mock: false
+
+spring:
+  datasource:
+    url: jdbc:postgresql://awseb-e-u3fkvpvc8b-stack-awsebrdsdatabase-3faoefqm5xkr.csripya6jgsa.ap-south-1.rds.amazonaws.com:5432/customer
+    username: divineaura
+    password: password
