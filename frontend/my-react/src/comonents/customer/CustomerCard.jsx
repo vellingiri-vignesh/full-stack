@@ -18,7 +18,7 @@ import {
     useColorModeValue,
     useDisclosure,
 } from '@chakra-ui/react';
-import {deleteCustomer, getProfilePictureUrl} from "../../services/client";
+import {deleteCustomer, getProfileImage, getProfileImageSecure} from "../../services/client";
 import {useRef} from "react";
 import {errorNotification, successNotification} from "../../services/notification";
 import UpdateCustomerDrawer from "./UpdateCustomerDrawer";
@@ -58,7 +58,7 @@ export default function CardWithImage(props) {
                     <Avatar
                         size={'xl'}
                         src={
-                            getProfilePictureUrl(props.gender, props.imageNumber)
+                            getProfileImage(props.id)
                         }
                         alt={'Author'}
                         css={{

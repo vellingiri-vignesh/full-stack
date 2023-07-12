@@ -9,6 +9,7 @@ import com.divineaura.service.S3Service;
 import java.util.List;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -75,7 +76,7 @@ public class CustomerController {
         customerService.uploadProfileImage(customerId, image);
     }
 
-    @GetMapping("{customerId}/profile-image")
+    @GetMapping(value = "{customerId}/profile-image", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> getProfilePicture(
         @PathVariable(name = "customerId") Integer customerId
     ){

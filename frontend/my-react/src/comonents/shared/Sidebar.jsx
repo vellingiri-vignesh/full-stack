@@ -10,6 +10,7 @@ import {
     Icon,
     IconButton,
     Image,
+    Link,
     Menu,
     MenuButton,
     MenuDivider,
@@ -20,15 +21,13 @@ import {
     useDisclosure,
     VStack
 } from '@chakra-ui/react';
-import {FiBell, FiChevronDown, FiCompass, FiHome, FiMenu, FiSettings, FiStar, FiTrendingUp,} from 'react-icons/fi';
+import {FiBell, FiChevronDown, FiUsers, FiHome, FiMenu, FiSettings} from 'react-icons/fi';
 import {useAuth} from "../context/AuthContext";
 
 const LinkItems = [
-    { name: 'Home', icon: FiHome },
-    { name: 'Trending', icon: FiTrendingUp },
-    { name: 'Explore', icon: FiCompass },
-    { name: 'Favourites', icon: FiStar },
-    { name: 'Settings', icon: FiSettings },
+    { name: 'Home', route: '/dashboard', icon: FiHome },
+    { name: 'Dashboard', route: 'dashboard/customers', icon: FiUsers },
+    { name: 'Settings', route: 'dashboard/settings' ,icon: FiSettings },
 ];
 
 export default function SidebarWithHeader({
@@ -88,7 +87,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
                 <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
             </Flex>
             {LinkItems.map((link) => (
-                <NavItem key={link.name} icon={link.icon}>
+                <NavItem key={link.name} route={link.route} icon={link.icon}>
                     {link.name}
                 </NavItem>
             ))}
@@ -97,9 +96,9 @@ const SidebarContent = ({ onClose, ...rest }) => {
 };
 
 
-const NavItem = ({ icon, children, ...rest }) => {
+const NavItem = ({ icon, route, children, ...rest }) => {
     return (
-        // <Link href="#" style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
+        <Link href={route} style={{textDecoration: 'none'}} _focus={{boxShadow: 'none'}}>
             <Flex
                 align="center"
                 p="4"
@@ -124,7 +123,7 @@ const NavItem = ({ icon, children, ...rest }) => {
                 )}
                 {children}
             </Flex>
-        // </Link>
+         </Link>
     );
 };
 

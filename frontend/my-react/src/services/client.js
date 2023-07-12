@@ -11,10 +11,7 @@ const getAuthConfig = () => (
         }
     }
 )
-export const getProfilePictureUrl = (gender, id) => {
-    const g = gender === "MALE" ? "men" : "women";
-    return `${customerProfilePictureEndpoint}/${g}/${id}.jpg`;
-}
+
 export const getCustomers = async () => {
     try {
         return await axios.get(
@@ -29,7 +26,7 @@ export const getCustomers = async () => {
 export const getCustomerById = async (customerId) => {
     try {
         return await axios.get(
-            customersEndpoint.concat("/",customerId),
+            customersEndpoint.concat("/", customerId),
             getAuthConfig()
         );
     } catch (e) {
@@ -67,3 +64,18 @@ export const postLogin = async (credentials) => {
         throw e;
     }
 }
+
+export const uploadProfileImage = async (customerId, formData) => {
+    try {
+        return (await axios.post(customersEndpoint.concat("/", customerId,'/profile-image'),
+            formData,
+            {
+                ...getAuthConfig(),
+                'Content-type': 'multipart/form-data'
+            }))
+    } catch (e) {
+        throw e;
+    }
+}
+export const getProfileImage = (customerId) =>
+    customersEndpoint.concat("/", customerId, '/profile-image');
