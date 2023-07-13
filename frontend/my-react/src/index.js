@@ -31,7 +31,11 @@ const router = createBrowserRouter([
         element: <ProtectedRoute>
             <App/>
         </ProtectedRoute>
-    }
+    },
+    {
+        path: "dashboard/settings",
+        element: <ProtectedRoute><Home/></ProtectedRoute>
+    },
 ])
 
 function ErrorBoundary() {

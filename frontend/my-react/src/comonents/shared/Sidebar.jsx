@@ -21,13 +21,13 @@ import {
     useDisclosure,
     VStack
 } from '@chakra-ui/react';
-import {FiBell, FiChevronDown, FiUsers, FiHome, FiMenu, FiSettings} from 'react-icons/fi';
+import {FiBell, FiChevronDown, FiHome, FiMenu, FiUsers} from 'react-icons/fi';
 import {useAuth} from "../context/AuthContext";
+import {useNavigate} from "react-router-dom";
 
 const LinkItems = [
     { name: 'Home', route: '/dashboard', icon: FiHome },
-    { name: 'Dashboard', route: 'dashboard/customers', icon: FiUsers },
-    { name: 'Settings', route: 'dashboard/settings' ,icon: FiSettings },
+    { name: 'Dashboard', route: '/dashboard/customers', icon: FiUsers },
 ];
 
 export default function SidebarWithHeader({
@@ -130,6 +130,7 @@ const NavItem = ({ icon, route, children, ...rest }) => {
 
 const MobileNav = ({ onOpen, ...rest }) => {
     let {customer, logout} = useAuth();
+    let navigate = useNavigate();
     return (
         <Flex
             ml={{ base: 0, md: 60 }}
@@ -198,8 +199,9 @@ const MobileNav = ({ onOpen, ...rest }) => {
                         <MenuList
                             bg={useColorModeValue('white', 'gray.900')}
                             borderColor={useColorModeValue('gray.200', 'gray.700')}>
-                            <MenuItem>Profile</MenuItem>
-                            <MenuItem>Settings</MenuItem>
+                            <MenuItem onClick={() => {
+                                navigate("/dashboard/settings")
+                            }}>Settings</MenuItem>
                             <MenuDivider />
                             <MenuItem onClick={() => {
                                 logout();

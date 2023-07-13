@@ -36,7 +36,7 @@ const LoginForm = () => {
             login(values)
                 .then(res => {
                     console.log("Successfully logged in ");
-                    navigate('/dashboard');
+                    navigate('/dashboard/customers');
                 })
                 .catch(err => {
                     console.log(err);
@@ -82,7 +82,7 @@ const Login = () => {
 
     useEffect(() => {
         if(customer) {
-            navigate("/dashboard")
+            navigate("/dashboard/customers")
         }
     })
 
